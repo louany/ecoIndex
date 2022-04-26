@@ -1,0 +1,21 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  font-size: 1.6rem;
+  min-height: 100vh;
+  background: rgb(173, 173, 173);
+  background: linear-gradient(0deg, rgba(173, 173, 173, 1) 0%, rgba(113, 113, 113, 1) 100%);
+}
+
+.wrapper {
+  max-width: 796px;
+  margin: 7rem auto 0;
+}
