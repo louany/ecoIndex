@@ -12,17 +12,14 @@ export default PageController = {
   crawl: async function (url) {
 
     if (this.seenUrl[url]) {
-      // console.log("URL DEJA PRESENTE", url + " : " + this.seenUrl[url])
       return;
     }
-
 
     this.URL_Object = new URL(url);
     this.PROTOCOL = this.URL_Object.protocol + "//";
     this.BASE_URL = this.PROTOCOL + this.URL_Object.hostname;
 
     // console.log("URL  :  ", this.URL_Object)
-
     
     await pageModel.recoverURLs(url)
 

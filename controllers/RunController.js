@@ -4,8 +4,7 @@ let run;
 export default run = {
   launch: async function (req, resp) {
     await pageController.crawl("https://www.artwai.fr")
-    const links = await pageController.getListUrls()
-    return links
+    return await pageController.getListUrls()
   }
 }
 
