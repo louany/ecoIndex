@@ -11,6 +11,8 @@ export default PageController = {
   LIMIT: 200,
   crawl: async function (url) {
 
+    // console.log("CRAWL ON  => ", url)
+
     if (this.seenUrl[url]) {
       return;
     }
@@ -23,14 +25,21 @@ export default PageController = {
     
     await pageModel.recoverURLs(url)
 
+    this.seenUrl[url] = true;
+
     const urls = await pageModel.getUrls();
 
     urls.map(async u => {
-      const uu = await this.validURL(u);
-      uu ? this.crawl(uu) : false
+      
+     const valid_url = await this.validURL(u);
+      console.log("URLS RE-CRAWL : ", u)
+      if(valid_url) {
+        if(this.getListUrls.size >= this.LIMIT) return;
+        await this.crawl(valid_url)
+        // console.log("RE-CRAWL : ", valid_url)
+      }
     })
-
-    this.seenUrl[url] = true;
+      
   },
   validURL: async function (url) {
     let valid_url = false;
@@ -41,14 +50,12 @@ export default PageController = {
     }
     if(valid_url) {
       if(valid_url.endsWith('/')) valid_url = valid_url.slice(0, -1)
-      this.setUrl(valid_url)
-      return valid_url;
+      await this.setUrl(valid_url)
     }
+    return valid_url;
   },
-  setUrl: function(url) {
-    if(url) {
-      this.URLS_list.add(url)
-    }
+  setUrl: async function(url) {
+    this.URLS_list.add(url)
   },
   getListUrls: async function() {
     return [...this.URLS_list]

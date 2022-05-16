@@ -4,16 +4,19 @@ import * as cheerio from 'cheerio';
 let pageModel;
 
 export default pageModel = {
+  
   URLS_LIST: new Set(),
 
   recoverURLs: async function (url) {
+    
+      await this.resetList()
 
       try {
         // Get Content Page
         const contentPage = await axios.get(url);
-        // Load DOM Content page
+        // Load DOM 
         const $ = cheerio.load(contentPage.data);
-        // Hydrate links SET & check if absolut url to add baseUrl
+        // Hydrate links SET
         $('a').map( async (_,link) => {
           await this.setUrl(link.attribs.href);
         });
@@ -22,14 +25,13 @@ export default pageModel = {
           console.error(error);
       }
   },
-  setUrl: function(url) {
-    // console.log("URL ADDED : ", url)
+  setUrl: async function(url) {
     this.URLS_LIST.add(url)
   },
   getUrls: async function () {
     return [...this.URLS_LIST];
   },
-  resetUrls: function () {
+  resetList: async function () {
     if (this.URLS_LIST.size > 0) {
       this.URLS_LIST.clear
       console.log("PageModal -  CLEAR SET", this.URLS_LIST.size + " url deleted")
